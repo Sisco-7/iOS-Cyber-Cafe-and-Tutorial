@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for JAMB Tutorials</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Register for JAMB Tutorials</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Join Us at Institute Of Scholars</h2>
+            <form id="registrationForm">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="department">Preferred Department:</label>
+                <select id="department" name="department" required>
+                    <option value="" disabled selected>Select Department</option>
+                    <option value="Science">Science</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
+
+                <label for="subjects">Preferred Subjects (Use of English is Compulsory):</label>
+                <select id="subjects" name="subjects[]" multiple required>
+                    <!-- Subjects will be dynamically populated here -->
+                </select>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2025 iOS Cyber Café & Online JAMB Tutorials. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const departmentSelect = document.getElementById('department');
+        const subjectsSelect = document.getElementById('subjects');
+
+        // Predefined subject options based on departments
+        const subjectsByDepartment = {
+            Science: ['Biology', 'Physics', 'Chemistry', 'Mathematics'],
+            Arts: ['Literature', 'Government', 'History', 'CRS'],
+            Commercial: ['Accounting', 'Commerce', 'Economics', 'Business Studies']
+        };
+
+        // Event listener for department selection
+        departmentSelect.addEventListener('change', () => {
+            const department = departmentSelect.value;
+
+            // Reset subjects dropdown
+            subjectsSelect.innerHTML = '';
+
+            // Add "Use of English" as a compulsory subject
+            const englishOption = document.createElement('option');
+            englishOption.value = 'Use of English';
+            englishOption.textContent = 'Use of English';
+            englishOption.selected = true;
+            englishOption.disabled = true; // Always compulsory and pre-selected
+            subjectsSelect.appendChild(englishOption);
+
+            // Add department-specific subjects
+            if (subjectsByDepartment[department]) {
+                subjectsByDepartment[department].forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectsSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Form submission event
+        document.getElementById('registrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const department = departmentSelect.value;
+            const selectedSubjects = Array.from(subjectsSelect.selectedOptions)
+                .map(option => option.value)
+                .join(', ');
+
+            // Prepare message for WhatsApp
+            const message = `Hello Admin, a new registration has been submitted:\n\n` +
+                            `Name: ${name}\n` +
+                            `Email: ${email}\n` +
+                            `Phone: ${phone}\n` +
+                            `Preferred Department: ${department}\n` +
+                            `Preferred Subjects: ${selectedSubjects}`;
+
+            const encodedMessage = encodeURIComponent(message);
+
+            // Replace YOUR_PHONE_NUMBER with the admin's WhatsApp number (with country code)
+            const whatsappURL = `https://wa.me/+2348128197651?text=${encodedMessage}`;
+
+            // Redirect to WhatsApp with the message
+            window.location.href = whatsappURL;
+        });
+    </script>
+</body>
+</html>
